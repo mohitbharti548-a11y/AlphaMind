@@ -28,9 +28,9 @@ def get_current_user(
             algorithms=[settings.ALGORITHM],
         )
 
-        email = payload.get("sub")
+        username = payload.get("sub")
 
-        if email is None:
+        if username is None:
             raise credentials_exception
 
     except JWTError:
@@ -38,7 +38,7 @@ def get_current_user(
 
     user = (
         db.query(User)
-        .filter(User.email == email)
+        .filter(User.username == username)
         .first()
     )
 

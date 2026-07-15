@@ -7,3 +7,4 @@ class Base(DeclarativeBase):
 
 # Import models so SQLAlchemy knows about them
 from app.models.user import User
+from app.models.portfolio import Portfolio
