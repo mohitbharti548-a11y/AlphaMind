@@ -27,5 +27,33 @@ def create_user(
     db.add(user)
     db.commit()
     db.refresh(user)
+    return user
+
+
+def authenticate_user(
+    db: Session,
+    username: str,
+    password: str,
+):
+    print("USERNAME:", username)
+
+    user = get_user_by_username(db, username)
+
+    print("USER FOUND:", user)
+
+    if not user:
+        print("User not found")
+        return None
+
+    from app.auth.hashing import verify_password
+
+    print("HASH:", user.hashed_password)
+
+    ok = verify_password(password, user.hashed_password)
+
+    print("PASSWORD OK:", ok)
+
+    if not ok:
+        return None
 
     return user

@@ -1,3 +1,8 @@
+from fastapi.security import OAuth2PasswordRequestForm
+
+from app.auth.jwt import create_access_token
+from app.schemas.token import Token
+from app.services.user_service import authenticate_user
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 
@@ -47,3 +52,32 @@ def register(
         email=user.email,
         password=user.password,
     )
+    
+
+@router.post("/login", response_model=Token)
+def login(
+    form_data: OAuth2PasswordRequestForm = Depends(),
+    db: Session = Depends(get_db),
+):
+    user = authenticate_user(
+        db=db,
+        username=form_data.username,
+        password=form_data.password,
+    )
+
+    if not user:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Invalid username or password",
+        )
+
+    access_token = create_access_token(
+        data={
+            "sub": user.username,
+        }
+    )
+
+    return {
+        "access_token": access_token,
+        "token_type": "bearer",
+    }

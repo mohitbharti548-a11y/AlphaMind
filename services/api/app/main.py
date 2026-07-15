@@ -2,6 +2,7 @@ from fastapi import FastAPI
 from app.core.config import settings
 from app.db.database import engine
 from app.db.base import Base
+from app.routes import users
 from app.routes.auth import router as auth_router
 app = FastAPI(
     title=settings.PROJECT_NAME,
@@ -10,6 +11,7 @@ app = FastAPI(
 )
 Base.metadata.create_all(bind=engine)
 app.include_router(auth_router)
+app.include_router(users.router)
 @app.get("/")
 async def root():
     return {
