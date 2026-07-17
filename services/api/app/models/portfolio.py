@@ -26,3 +26,13 @@ class Portfolio(Base):
         "User",
         back_populates="portfolios",
     )
+    assets = relationship(
+    "Asset",
+    back_populates="portfolio",
+    cascade="all, delete",
+    )
+    transactions = relationship(
+    "Transaction",
+    back_populates="portfolio",
+    cascade="all, delete-orphan",
+)

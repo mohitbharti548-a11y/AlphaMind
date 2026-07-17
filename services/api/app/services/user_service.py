@@ -2,14 +2,17 @@ from sqlalchemy.orm import Session
 
 from app.models.user import User
 from app.auth.hashing import hash_password
+from app.repositories.user_repositories import UserRepository
 
 
-def get_user_by_email(db: Session, email: str):
-    return db.query(User).filter(User.email == email).first()
+def get_by_email(db: Session, email: str):
+    repo = UserRepository(db)
+    return repo.get_by_email(email)
 
 
-def get_user_by_username(db: Session, username: str):
-    return db.query(User).filter(User.username == username).first()
+def get_by_username(db: Session, username: str):
+    repo = UserRepository(db)
+    return repo.get_by_username(username)
 
 
 def create_user(
@@ -24,9 +27,8 @@ def create_user(
         hashed_password=hash_password(password),
     )
 
-    db.add(user)
-    db.commit()
-    db.refresh(user)
+    repo = UserRepository(db)
+    repo.create(user)
     return user
 
 
@@ -37,7 +39,7 @@ def authenticate_user(
 ):
     print("USERNAME:", username)
 
-    user = get_user_by_username(db, username)
+    user = get_by_username(db, username)
 
     print("USER FOUND:", user)
 

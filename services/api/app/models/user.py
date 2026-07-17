@@ -3,7 +3,7 @@ from sqlalchemy.orm import Mapped, mapped_column
 
 from app.db.base import Base
 from sqlalchemy.orm import relationship
-
+from sqlalchemy import Boolean
 class User(Base):
     __tablename__ = "users"
 
@@ -26,3 +26,13 @@ class User(Base):
         String(255),
         nullable=False,
     )
+
+    is_active: Mapped[bool] = mapped_column(
+        Boolean,
+        default=True,
+    )
+    portfolios = relationship(
+    "Portfolio",
+    back_populates="user",
+    cascade="all, delete",
+)

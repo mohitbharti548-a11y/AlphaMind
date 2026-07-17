@@ -1,0 +1,33 @@
+# Node
+
+node_modules
+.next
+dist
+
+# Python
+
+__pycache__
+.venv
+*.pyc
+
+# Environment
+
+.env
+
+# Logs
+
+*.log
+
+# VSCode
+
+.vscode
+
+# OS
+
+.DS_Store
+Thumbs.db
+
+# Test and coverage artifacts
+.coverage
+htmlcov/
+.pytest_cache/

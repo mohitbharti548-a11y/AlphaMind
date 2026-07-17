@@ -4,14 +4,21 @@ from app.db.database import engine
 from app.db.base import Base
 from app.routes import users
 from app.routes.auth import router as auth_router
+from app.routes import portfolios
+from app.routes.transactions import router as transaction_router
+from app.routes.analytics import router as analytics_router
+from app.routes.dashboard import router as dashboard_router
 app = FastAPI(
     title=settings.PROJECT_NAME,
     version=settings.VERSION,
     description="AI Financial Intelligence Platform",
 )
-Base.metadata.create_all(bind=engine)
+app.include_router(dashboard_router)
 app.include_router(auth_router)
 app.include_router(users.router)
+app.include_router(portfolios.router)
+app.include_router(transaction_router)
+app.include_router(analytics_router)
 @app.get("/")
 async def root():
     return {
